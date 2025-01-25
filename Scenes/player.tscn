@@ -2001,7 +2001,9 @@ point_count = 3
 colors = PackedColorArray(0.996078, 0.909804, 0.352941, 1, 1, 1, 1, 1)
 
 [node name="Player" type="CharacterBody3D" groups=["Player"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0132599, 0, -0.0164604)
 script = ExtResource("1_t0xh4")
+move_speed = 10.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000624448, 0.675578, -0.00332153)
@@ -2204,7 +2206,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 script = ExtResource("5_pxu3x")
 
 [node name="Camera3D" type="Camera3D" parent="Gimbal"]
-transform = Transform3D(1, -1.30385e-08, 1.41967e-14, 1.29856e-08, 0.995947, 0.0899373, -1.17266e-09, -0.0899373, 0.995947, 0, 2.97337, 5)
+transform = Transform3D(1, -1.30384e-08, 1.73053e-14, 1.29856e-08, 0.995947, 0.0899373, -1.17266e-09, -0.0899373, 0.995947, 0, 1.68742, 2.7836)
+doppler_tracking = 2
 current = true
 
 [node name="ParticleTrail" type="CPUParticles3D" parent="."]
@@ -2221,11 +2224,17 @@ scale_amount_min = 0.75
 scale_amount_curve = SubResource("Curve_ooin1")
 
 [node name="Footsteps" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0314059, 0.0111408, -0.0117936)
+visible = false
 stream = ExtResource("7_asqdb")
-pitch_scale = 0.75
+attenuation_model = 2
+volume_db = -20.0
 autoplay = true
+max_polyphony = 100
+doppler_tracking = 1
 
 [node name="Sparkles" type="CPUParticles3D" parent="."]
+visible = false
 amount = 12
 mesh = SubResource("QuadMesh_w52bm")
 spread = 180.0
