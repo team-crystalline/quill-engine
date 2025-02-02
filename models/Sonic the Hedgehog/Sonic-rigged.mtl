@@ -1,0 +1,52 @@
+# Blender 4.2.2 LTS MTL File: 'None'
+# www.blender.org
+
+newmtl null
+Ns 50.000011
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 3
+
+newmtl stx_00
+Ns 50.000011
+Ka 1.000000 1.000000 1.000000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+illum 3
+map_Kd /home/dee/3D Models/3D Models/sa2b_Sonic_beta/source/source/stx_00.png
+map_d /home/dee/3D Models/3D Models/sa2b_Sonic_beta/source/source/stx_00.png
+
+newmtl stx_01
+Ns 50.000011
+Ka 1.000000 1.000000 1.000000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+illum 3
+map_Kd /home/dee/3D Models/3D Models/sa2b_Sonic_beta/source/source/stx_01.png
+map_d /home/dee/3D Models/3D Models/sa2b_Sonic_beta/source/source/stx_01.png
+
+newmtl stx_ref00
+Ns 50.000011
+Ka 1.000000 1.000000 1.000000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+illum 3
+map_Kd /home/dee/3D Models/3D Models/sa2b_Sonic_beta/source/source/stx_ref00.png
+map_d /home/dee/3D Models/3D Models/sa2b_Sonic_beta/source/source/stx_ref00.png
+
+newmtl stx_s000
+Ns 50.000011
+Ka 1.000000 1.000000 1.000000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+illum 3
+map_Kd /home/dee/3D Models/3D Models/sa2b_Sonic_beta/source/source/stx_s000.png
+map_d /home/dee/3D Models/3D Models/sa2b_Sonic_beta/source/source/stx_s000.png
