@@ -1,0 +1,31 @@
+[gd_scene load_steps=4 format=3 uid="uid://b05ha6e2kp12k"]
+
+[ext_resource type="PackedScene" uid="uid://di81srkbmsp2n" path="res://models/Sonic the Hedgehog/Sonic.fbx" id="1_f6nhd"]
+
+[sub_resource type="Animation" id="Animation_mifdy"]
+resource_name = "idle"
+tracks/0/type = "rotation_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array()
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ckm78"]
+_data = {
+"idle": SubResource("Animation_mifdy")
+}
+
+[node name="Sonic" instance=ExtResource("1_f6nhd")]
+
+[node name="n000_object_000099A0" parent="." index="0"]
+transform = Transform3D(-2.18557e-08, 0, 0.5, 0, 0.5, 0, -0.5, 0, -2.18557e-08, 0.001, 0, 0)
+
+[node name="Skeleton3D" parent="n000_object_000099A0" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="n000_object_000099A0/Skeleton3D" index="1"]
+libraries = {
+"": SubResource("AnimationLibrary_ckm78")
+}

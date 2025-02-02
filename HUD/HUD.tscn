@@ -1,0 +1,71 @@
+[gd_scene load_steps=7 format=3 uid="uid://b6osv3mvkgnwe"]
+
+[ext_resource type="Script" path="res://HUD/GameUI.gd" id="1_yufsv"]
+[ext_resource type="Texture2D" uid="uid://bwthk5exts80n" path="res://HUD/sonic-head-icon2.png" id="2_bx78v"]
+
+[sub_resource type="SystemFont" id="SystemFont_cqrw1"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_4t482"]
+font = SubResource("SystemFont_cqrw1")
+font_size = 50
+outline_size = 8
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 2
+shadow_color = Color(0, 0, 0, 1)
+shadow_offset = Vector2(2, 2)
+
+[sub_resource type="SystemFont" id="SystemFont_ima3t"]
+font_italic = true
+
+[sub_resource type="LabelSettings" id="LabelSettings_trn0w"]
+font = SubResource("SystemFont_ima3t")
+font_size = 40
+outline_size = 8
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 4
+shadow_color = Color(0, 0, 0, 1)
+shadow_offset = Vector2(2, 2)
+
+[node name="Hud" type="CanvasLayer" groups=["HUD"]]
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_yufsv")
+
+[node name="RingsLabel" type="Label" parent="Control"]
+layout_mode = 0
+offset_left = 318.0
+offset_top = -1.0
+offset_right = 387.0
+offset_bottom = 68.0
+text = "0
+"
+label_settings = SubResource("LabelSettings_4t482")
+
+[node name="RingsLabel2" type="Label" parent="Control"]
+offset_left = 179.0
+offset_top = 7.0
+offset_right = 310.0
+offset_bottom = 76.0
+text = "RINGS:
+"
+label_settings = SubResource("LabelSettings_trn0w")
+
+[node name="TextureRect" type="TextureRect" parent="Control"]
+layout_mode = 0
+offset_left = 13.0
+offset_right = 81.0
+offset_bottom = 68.0
+texture = ExtResource("2_bx78v")
+expand_mode = 1
+
+[node name="LivesLabel" type="Label" parent="Control"]
+offset_left = 93.0
+offset_right = 162.0
+offset_bottom = 69.0
+text = "0
+"
+label_settings = SubResource("LabelSettings_4t482")
