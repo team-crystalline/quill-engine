@@ -30,6 +30,12 @@ import/blender/enabled=false
 
 Player="The player object."
 HUD=""
+Daytime="This scene takes place during the day."
+Morning="This scene takes place in the morning."
+Afternoon="This scene takes place in the afternoon"
+Dusk="This scene takes place at dusk."
+Night="This scene takes place at night."
+Level="This is a hub world, platforming level or boss level."
 
 [input]
 

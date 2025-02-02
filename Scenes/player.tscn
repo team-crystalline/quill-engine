@@ -35,7 +35,7 @@ visible = false
 [node name="MeshInstance3D" type="MeshInstance3D" parent="JumpModel"]
 mesh = SubResource("SphereMesh_2ndy1")
 
-[node name="SpotLight3D" type="SpotLight3D" parent="."]
+[node name="SpotLight" type="SpotLight3D" parent="."]
 transform = Transform3D(0.999328, 0.0348338, 0.0113959, -0.0366312, 0.939201, 0.341409, 0.00118953, -0.341597, 0.939846, 0.0265532, 0.762832, 2.29484)
 light_color = Color(1, 0.888, 0.79, 1)
 shadow_enabled = true

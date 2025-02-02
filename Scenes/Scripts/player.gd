@@ -32,12 +32,31 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity") * 2
 # Sounds
 @onready var jump_sound = $JumpSound
 # -------------------------------------- #
+@onready var level := get_tree().get_first_node_in_group("Level")
+@onready var spot_light = $SpotLight
+
+# Spin Dash properties
+var is_spinning: bool = false
+var spin_dash_speed: float = 150 # Speed during Spin Dash
+var spin_dash_duration: float = 1.0 # Duration of the Spin Dash
+var spin_dash_timer: float = 0.0 # Timer for Spin Dash
+
+func _ready() -> void:
+	print("Sonic's the name, speed's my game!")
+	var level_groups = level.get_groups()
+	if level.is_in_group("Morning") or level.is_in_group("Daytime") or level.is_in_group("Afternoon"):
+		print("It's daytime. I don't need my spotlight.")
+		spot_light.visible = false
+	else:
+		print("It's probably dark out. I should use my spotlight so the player can see me!")
+		spot_light.visible = true 
 
 func is_moving():
 	return abs(velocity.z) > 0 || abs(velocity.x) > 0
 
 func _physics_process(delta: float) -> void:
-	
+	var input_dir := Input.get_vector("Left", "Right", "Forward", "Backward")
+	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	# Add the gravity.
 	if not is_on_floor():
 		velocity.y -= gravity * delta
@@ -49,8 +68,21 @@ func _physics_process(delta: float) -> void:
 
 	# Handle jump.
 	if Input.is_action_just_pressed("Jump") and is_on_floor():
-		velocity.y = jump_force
+		velocity.y = max_jump_height
 		jump_sound.play()
+	
+		# Handle Spin Dash
+	if Input.is_action_just_pressed("SpinDash") and is_on_floor() and not is_spinning:
+		print("Spin Dash!")
+		is_spinning = true
+		spin_dash_timer = spin_dash_duration
+		velocity.x = direction.x * spin_dash_speed
+		velocity.z = direction.z * spin_dash_speed
+
+	if is_spinning:
+		spin_dash_timer -= delta
+		if spin_dash_timer <= 0:
+			is_spinning = false
 	
 	if is_moving():
 		# Look in the right direction.
@@ -59,10 +91,6 @@ func _physics_process(delta: float) -> void:
 	else:
 		# Reset current speed. Momentum must be built up again.
 		current_speed = 0
-
-	# Get the input direction and handle the movement/deceleration.
-	var input_dir := Input.get_vector("Left", "Right", "Forward", "Backward")
-	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 
 	if direction:
 		# Calculate target speed based on input
