@@ -9,6 +9,7 @@ extends CharacterBody3D
 @export var rings : int = 0
 @export var lives : int = 3
 @export_group("Ground Physics")
+@export var stickiness_factor: float = 0.1  # Adjust this value to control how much Sonic sticks to the ground
 @export var move_speed : float = 30
 @export var follow_lerp_factor : float = 16
 @export var jump_limit : int = 2
@@ -41,6 +42,23 @@ var spin_dash_speed: float = 150 # Speed during Spin Dash
 var spin_dash_duration: float = 1.0 # Duration of the Spin Dash
 var spin_dash_timer: float = 0.0 # Timer for Spin Dash
 
+func update_rotation(axis: int, floor_normal_value: float) -> void:
+	# Check if the slope normal for the given axis is 0
+	if floor_normal_value == 0:
+		# Snap back to upright position
+		match axis:
+			0: model.rotation.x = 0  # Upright for x-axis
+			1: model.rotation.y = 0  # Upright for y-axis
+			2: model.rotation.z = 0  # Upright for z-axis
+	else:
+		# Update rotation with clamping
+		match axis:
+			# + floor_normal_value
+			0: model.rotation.x = floor_normal_value
+			1: model.rotation.y = floor_normal_value # Should be unused unless wall running?
+			2: model.rotation.z = floor_normal_value
+	print("Model should be rotated:", model.rotation)
+
 func _ready() -> void:
 	print("Sonic's the name, speed's my game!")
 	var level_groups = level.get_groups()
@@ -65,6 +83,9 @@ func _physics_process(delta: float) -> void:
 	else:
 		model.visible = true
 		jumpModel.visible =false
+		# Apply stickiness when on the floor
+		if velocity.y < 0:  # Only apply stickiness if falling
+			velocity.y = max(velocity.y, -stickiness_factor)  # Limit downward velocity
 
 	# Handle jump.
 	if Input.is_action_just_pressed("Jump") and is_on_floor():
@@ -83,7 +104,8 @@ func _physics_process(delta: float) -> void:
 		spin_dash_timer -= delta
 		if spin_dash_timer <= 0:
 			is_spinning = false
-	
+
+
 	if is_moving():
 		# Look in the right direction.
 		var look_direction = Vector2(velocity.z, velocity.x)
@@ -95,6 +117,9 @@ func _physics_process(delta: float) -> void:
 	if direction:
 		# Calculate target speed based on input
 		var target_speed = direction.length() * move_speed
+		var floor_normal = get_floor_normal()
+		update_rotation(0, floor_normal.x)  # X-axis
+		#update_rotation(2, floor_normal.z)  # Z-axis
 
 		# Apply acceleration
 		if is_on_floor():
