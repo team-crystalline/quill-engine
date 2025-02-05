@@ -119,7 +119,7 @@ func _physics_process(delta: float) -> void:
 		var target_speed = direction.length() * move_speed
 		var floor_normal = get_floor_normal()
 		update_rotation(0, floor_normal.x)  # X-axis
-		#update_rotation(2, floor_normal.z)  # Z-axis
+		update_rotation(2, floor_normal.z)  # Z-axis
 
 		# Apply acceleration
 		if is_on_floor():
