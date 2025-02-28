@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://clu4noec3auv1"]
+[gd_scene load_steps=15 format=3 uid="uid://clu4noec3auv1"]
 
 [ext_resource type="ArrayMesh" uid="uid://bn573gnn8v2al" path="res://models/ring.obj" id="1_47q5r"]
 [ext_resource type="Script" path="res://Scenes/Scripts/ring.gd" id="1_ormiq"]
@@ -9,14 +9,24 @@ radius = 0.551907
 
 [sub_resource type="MeshTexture" id="MeshTexture_xe5yy"]
 
+[sub_resource type="Gradient" id="Gradient_fot0c"]
+colors = PackedColorArray(0.757148, 0.220339, 0.0932831, 1, 0.87, 1, 0.22, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_knel1"]
+gradient = SubResource("Gradient_fot0c")
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ktsrt"]
-albedo_color = Color(1, 0.733333, 0, 1)
+albedo_color = Color(0.78, 0.57746, 0.1404, 1)
 albedo_texture = SubResource("MeshTexture_xe5yy")
-metallic = 0.46
-metallic_specular = 1.0
-roughness = 0.17
+metallic = 0.49
+metallic_specular = 0.0
+roughness_texture = SubResource("GradientTexture2D_knel1")
+roughness_texture_channel = 4
 emission_enabled = true
-emission = Color(0.492585, 0.283087, 0.00937163, 1)
+emission = Color(0.28, 0.161093, 0.00559999, 1)
+emission_energy_multiplier = 3.7
+refraction_enabled = true
+refraction_scale = 0.73
 
 [sub_resource type="Curve" id="Curve_jnm54"]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.5, 0.813187), 0.0, 0.0, 0, 0, Vector2(0.966292, 0.0659341), 0.0, 0.0, 0, 0]
@@ -30,7 +40,7 @@ length = 0.001
 tracks/0/type = "rotation_3d"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("MeshInstance3D")
+tracks/0/path = NodePath("RingModel")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1)
@@ -47,7 +57,7 @@ step = 0.25
 tracks/0/type = "rotation_3d"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("MeshInstance3D")
+tracks/0/path = NodePath("RingModel")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 0.25, 1, 0, -0.707107, 0, 0.707107, 0.5, 1, 0, 1, 0, 4.37114e-08)
@@ -60,11 +70,11 @@ _data = {
 [node name="Ring" type="Area3D"]
 script = ExtResource("1_ormiq")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="RingBox" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_t8ehs")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
+[node name="RingModel" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
 mesh = ExtResource("1_47q5r")
 surface_material_override/0 = SubResource("StandardMaterial3D_ktsrt")
 
@@ -94,5 +104,23 @@ libraries = {
 autoplay = "Ring/spin"
 
 [node name="Timer" type="Timer" parent="."]
+
+[node name="CollectBling" type="CPUParticles3D" parent="."]
+visible = false
+amount = 36
+explosiveness = 1.0
+randomness = 1.0
+lifetime_randomness = 1.0
+local_coords = true
+mesh = ExtResource("2_il5f8")
+spread = 180.0
+gravity = Vector3(0, -0.2, 0)
+initial_velocity_max = 0.5
+scale_amount_min = 0.07
+scale_amount_max = 0.15
+scale_amount_curve = SubResource("Curve_jnm54")
+color_ramp = SubResource("Gradient_u3d5s")
+hue_variation_min = 0.03
+hue_variation_max = 0.03
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
