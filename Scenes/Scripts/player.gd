@@ -57,7 +57,7 @@ func update_rotation(axis: int, floor_normal_value: float) -> void:
 			0: model.rotation.x = floor_normal_value
 			1: model.rotation.y = floor_normal_value # Should be unused unless wall running?
 			2: model.rotation.z = floor_normal_value
-	print("Model should be rotated:", model.rotation)
+	#print("Model should be rotated:", model.rotation)
 
 func _ready() -> void:
 	print("Sonic's the name, speed's my game!")
@@ -78,8 +78,8 @@ func _physics_process(delta: float) -> void:
 	# Add the gravity.
 	if not is_on_floor():
 		velocity.y -= gravity * delta
-		model.visible=false
-		jumpModel.visible=true
+		#model.visible=false
+		#jumpModel.visible=true
 	else:
 		model.visible = true
 		jumpModel.visible =false
@@ -90,7 +90,7 @@ func _physics_process(delta: float) -> void:
 	# Handle jump.
 	if Input.is_action_just_pressed("Jump") and is_on_floor():
 		velocity.y = max_jump_height
-		jump_sound.play()
+		#jump_sound.play()
 	
 		# Handle Spin Dash
 	if Input.is_action_just_pressed("SpinDash") and is_on_floor() and not is_spinning:

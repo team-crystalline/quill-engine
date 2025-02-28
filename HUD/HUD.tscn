@@ -1,30 +1,73 @@
-[gd_scene load_steps=7 format=3 uid="uid://b6osv3mvkgnwe"]
+[gd_scene load_steps=11 format=3 uid="uid://b6osv3mvkgnwe"]
 
 [ext_resource type="Script" path="res://HUD/GameUI.gd" id="1_yufsv"]
 [ext_resource type="Texture2D" uid="uid://bwthk5exts80n" path="res://HUD/sonic-head-icon2.png" id="2_bx78v"]
+[ext_resource type="Texture2D" uid="uid://ved3w1gn00fe" path="res://HUD/stroke-sonic.png" id="3_qomgx"]
+[ext_resource type="LabelSettings" uid="uid://bcnrp175fg5hg" path="res://HUD/HUD-font.tres" id="3_vb3xy"]
+[ext_resource type="Texture2D" uid="uid://xd8h0uovwpfy" path="res://HUD/ring.png" id="4_l5klh"]
+[ext_resource type="Script" path="res://HUD/timer_label.gd" id="6_1q1pj"]
+[ext_resource type="Texture2D" uid="uid://11nemdf4lr0w" path="res://HUD/spray-burst.png" id="7_8mp2j"]
 
-[sub_resource type="SystemFont" id="SystemFont_cqrw1"]
+[sub_resource type="Animation" id="Animation_5mh32"]
+resource_name = "float"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("LivesHead:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(2.94178, 15.4444), Vector2(2.94178, 13.238)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Ring:position")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(104.894, 15), Vector2(104.433, 12.5026)]
+}
 
-[sub_resource type="LabelSettings" id="LabelSettings_4t482"]
-font = SubResource("SystemFont_cqrw1")
-font_size = 50
-outline_size = 8
-outline_color = Color(0, 0, 0, 1)
-shadow_size = 2
-shadow_color = Color(0, 0, 0, 1)
-shadow_offset = Vector2(2, 2)
+[sub_resource type="Animation" id="Animation_nr7we"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("LivesHead:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(4, 13)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Ring:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(104.894, 15)]
+}
 
-[sub_resource type="SystemFont" id="SystemFont_ima3t"]
-font_italic = true
-
-[sub_resource type="LabelSettings" id="LabelSettings_trn0w"]
-font = SubResource("SystemFont_ima3t")
-font_size = 40
-outline_size = 8
-outline_color = Color(0, 0, 0, 1)
-shadow_size = 4
-shadow_color = Color(0, 0, 0, 1)
-shadow_offset = Vector2(2, 2)
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_mvjpm"]
+_data = {
+"RESET": SubResource("Animation_nr7we"),
+"float": SubResource("Animation_5mh32")
+}
 
 [node name="Hud" type="CanvasLayer" groups=["HUD"]]
 
@@ -33,39 +76,85 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
+scale = Vector2(1.35972, 1.35972)
 script = ExtResource("1_yufsv")
 
-[node name="RingsLabel" type="Label" parent="Control"]
+[node name="LivesHead" type="TextureRect" parent="Control"]
 layout_mode = 0
-offset_left = 318.0
-offset_top = -1.0
-offset_right = 387.0
-offset_bottom = 68.0
-text = "0
-"
-label_settings = SubResource("LabelSettings_4t482")
-
-[node name="RingsLabel2" type="Label" parent="Control"]
-offset_left = 179.0
-offset_top = 7.0
-offset_right = 310.0
-offset_bottom = 76.0
-text = "RINGS:
-"
-label_settings = SubResource("LabelSettings_trn0w")
-
-[node name="TextureRect" type="TextureRect" parent="Control"]
-layout_mode = 0
-offset_left = 13.0
-offset_right = 81.0
-offset_bottom = 68.0
+offset_left = 4.0
+offset_top = 13.0
+offset_right = 72.0
+offset_bottom = 81.0
+rotation = -0.025154
+scale = Vector2(0.57421, 0.57421)
 texture = ExtResource("2_bx78v")
 expand_mode = 1
 
 [node name="LivesLabel" type="Label" parent="Control"]
-offset_left = 93.0
-offset_right = 162.0
-offset_bottom = 69.0
+layout_mode = 0
+offset_left = 46.0
+offset_top = 13.157
+offset_right = 87.0
+offset_bottom = 47.157
+rotation = -0.025154
+text = "0"
+label_settings = ExtResource("3_vb3xy")
+
+[node name="Ring" type="TextureRect" parent="Control"]
+offset_left = 104.894
+offset_top = 15.0
+offset_right = 1078.89
+offset_bottom = 994.0
+rotation = 0.159388
+scale = Vector2(0.0186224, 0.0186224)
+texture = ExtResource("4_l5klh")
+
+[node name="RingsLabel" type="Label" parent="Control"]
+offset_left = 122.894
+offset_top = 7.15696
+offset_right = 168.894
+offset_bottom = 41.157
+rotation = -0.025154
 text = "0
 "
-label_settings = SubResource("LabelSettings_4t482")
+label_settings = ExtResource("3_vb3xy")
+
+[node name="Stroke" type="TextureRect" parent="Control"]
+z_index = -2
+layout_mode = 0
+offset_left = -62.0
+offset_top = 16.0
+offset_right = 962.0
+offset_bottom = 400.0
+rotation = -0.0554691
+scale = Vector2(0.388129, 0.102954)
+texture = ExtResource("3_qomgx")
+metadata/_edit_lock_ = true
+
+[node name="TimerLabel" type="Label" parent="Control"]
+layout_mode = 0
+offset_left = 174.0
+offset_top = 6.0
+offset_right = 269.0
+offset_bottom = 40.0
+rotation = -0.025154
+scale = Vector2(0.892471, 0.837674)
+text = "00:00:00"
+label_settings = ExtResource("3_vb3xy")
+script = ExtResource("6_1q1pj")
+
+[node name="TextureRect" type="TextureRect" parent="Control"]
+z_index = -1
+layout_mode = 0
+offset_left = -5.0
+offset_top = 7.0
+offset_right = 212.0
+offset_bottom = 207.0
+scale = Vector2(0.249773, 0.249773)
+texture = ExtResource("7_8mp2j")
+metadata/_edit_lock_ = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Control"]
+libraries = {
+"": SubResource("AnimationLibrary_mvjpm")
+}

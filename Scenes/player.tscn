@@ -1,12 +1,13 @@
-[gd_scene load_steps=11 format=3 uid="uid://dr5h4igk1uk1x"]
+[gd_scene load_steps=8 format=3 uid="uid://dr5h4igk1uk1x"]
 
 [ext_resource type="Script" path="res://Scenes/Scripts/player.gd" id="1_bx745"]
 [ext_resource type="AudioStream" uid="uid://duwrvp8lmogj0" path="res://Audio/FX/ring.ogg" id="3_s2ogt"]
+[ext_resource type="ArrayMesh" uid="uid://dlbtcoowa2dcm" path="res://models/Sonic the Hedgehog/placeholder/Sonic.obj" id="4_6gki1"]
 [ext_resource type="AudioStream" uid="uid://6awa70y4vryu" path="res://Audio/FX/jump.ogg" id="4_p63kn"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_pjq45"]
-radius = 0.557779
-height = 1.98978
+radius = 0.261054
+height = 1.67536
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lttlp"]
 albedo_color = Color(0.078, 0.0954, 0.6, 1)
@@ -14,29 +15,27 @@ albedo_color = Color(0.078, 0.0954, 0.6, 1)
 [sub_resource type="SphereMesh" id="SphereMesh_2ndy1"]
 material = SubResource("StandardMaterial3D_lttlp")
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_oeesi"]
-noise_type = 3
-fractal_type = 3
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_uo0np"]
-noise = SubResource("FastNoiseLite_oeesi")
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1fg4y"]
-albedo_color = Color(0.299668, 0.634025, 1, 1)
-albedo_texture = SubResource("NoiseTexture2D_uo0np")
-
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_443n3"]
-material = SubResource("StandardMaterial3D_1fg4y")
-
 [node name="Player" type="CharacterBody3D" groups=["Player"]]
 script = ExtResource("1_bx745")
+stickiness_factor = 5.0
+move_speed = 256.0
+top_speed = 200.0
+max_speed = 400.0
+max_jump_height = 16.0
+
+[node name="Sonic" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.963517, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Sonic"]
+transform = Transform3D(-6.02321e-10, 0, 0.0137795, 0, 0.0137795, 0, -0.0137795, 0, -6.02321e-10, 0, -0.996426, 0)
+mesh = ExtResource("4_6gki1")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00879997, -0.229938, -0.0363729)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00879997, 0.733579, -0.0363729)
 shape = SubResource("CapsuleShape3D_pjq45")
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.999992, -0.00401454, 0, 0.00401454, 0.999992, 0, 0.74058, 3.78038)
+transform = Transform3D(1, 0, 0, 0, 0.999992, -0.00401454, 0, 0.00401454, 0.999992, 0, 1.39094, 3.78038)
 doppler_tracking = 1
 
 [node name="JumpModel" type="Node3D" parent="."]
@@ -46,7 +45,7 @@ visible = false
 mesh = SubResource("SphereMesh_2ndy1")
 
 [node name="SpotLight" type="SpotLight3D" parent="."]
-transform = Transform3D(0.999328, 0.0348338, 0.0113959, -0.0366312, 0.939201, 0.341409, 0.00118953, -0.341597, 0.939846, 0.0265532, 0.762832, 2.29484)
+transform = Transform3D(0.999328, 0.0348338, 0.0113959, -0.0366312, 0.939201, 0.341409, 0.00118953, -0.341597, 0.939846, 0.0265532, 1.66635, 2.29484)
 light_color = Color(1, 0.888, 0.79, 1)
 shadow_enabled = true
 spot_range = 3.88342
@@ -59,9 +58,3 @@ max_polyphony = 20
 [node name="JumpSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_p63kn")
 pitch_scale = 1.14
-
-[node name="Sonic" type="Node3D" parent="."]
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Sonic"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.244263, 0)
-mesh = SubResource("CapsuleMesh_443n3")

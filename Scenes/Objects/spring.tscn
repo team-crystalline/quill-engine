@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://dtojkni8rqwp8"]
+
+[ext_resource type="Script" path="res://Scenes/Objects/spring.gd" id="1_07jmr"]
+[ext_resource type="ArrayMesh" uid="uid://dqgopgroymbwq" path="res://models/Objects/Spring/triple spring.obj" id="1_61hrl"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_818k6"]
+size = Vector3(9.66125, 2.27502, 2.53528)
+
+[node name="Spring" type="Area3D"]
+script = ExtResource("1_07jmr")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(0.5, 0, 0, 0, 0.499962, -0.00619576, 0, 0.00619576, 0.499962, 0.030365, 0.706001, 0.445946)
+shape = SubResource("BoxShape3D_818k6")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
+mesh = ExtResource("1_61hrl")
+skeleton = NodePath("")
+
+[connection signal="body_shape_entered" from="." to="." method="_on_body_shape_entered"]

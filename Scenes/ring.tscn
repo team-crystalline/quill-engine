@@ -68,6 +68,7 @@ _data = {
 }
 
 [node name="Ring" type="Area3D"]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
 script = ExtResource("1_ormiq")
 
 [node name="RingBox" type="CollisionShape3D" parent="."]
