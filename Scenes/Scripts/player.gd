@@ -90,6 +90,7 @@ func _physics_process(delta: float) -> void:
 		spin_dash_timer = spin_dash_duration
 		velocity.x = direction.x * spin_dash_speed
 		velocity.z = direction.z * spin_dash_speed
+		current_speed = spin_dash_speed
 
 	if is_spinning:
 		spin_dash_timer -= delta
@@ -121,15 +122,28 @@ func _physics_process(delta: float) -> void:
 		velocity.x = direction.x * current_speed
 		velocity.z = direction.z * current_speed
 	else:
-		current_speed = current_speed - deceleration_rate * delta
+		# Assuming deceleration_rate is defined and current_speed is initialized
+		current_speed = current_speed - (deceleration_rate / 10)
 		current_speed = max(current_speed, 0)
-		# Bug: Sonic slows down gradually (wanted), but pulls to a cardinal direction (unwanted)
-		velocity.x = direction.x - current_speed
-		velocity.z = direction.z - current_speed
-		print(velocity)
 
-	# Update the vertical velocity based on the floor normal
-	if is_on_floor():
-		velocity.y = max(0, velocity.y)  # Prevent upward movement when on the floor
+		# Decelerate velocity.x towards 0
+		if velocity.x != 0:
+			velocity.x -= sign(velocity.x) * (deceleration_rate / 10)
+			# Clamp velocity.x to 0 if it goes below 0
+			if (sign(velocity.x) != sign(velocity.x + (deceleration_rate / 10))):
+				velocity.x = 0
+
+		# Decelerate velocity.z towards 0
+		if velocity.z != 0:
+			velocity.z -= sign(velocity.z) * (deceleration_rate / 10)
+			# Clamp velocity.z to 0 if it goes below 0
+			if (sign(velocity.z) != sign(velocity.z + (deceleration_rate / 10))):
+				velocity.z = 0
+
+	print("----")
+	print(current_speed)
+	print("Velocity: ")
+	print(velocity)
+	print("----")
 	# Move the character
 	move_and_slide()

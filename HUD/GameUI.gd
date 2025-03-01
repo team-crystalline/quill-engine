@@ -15,4 +15,4 @@ func _process(delta: float) -> void:
 	ringLabel.text= "%d" % player.rings
 	livesLabel.text= "%d" % player.lives
 	#print(player.velocity)
-	$SpeedLabel.text = "Velocity: \n(%s, %s)" % [str(player.velocity.x), str(player.velocity.y)]
+	$SpeedLabel.text = "Velocity: \n(x:%s, y:%s, z:%s)" % [str(player.velocity.x), str(player.velocity.y), str(player.velocity.z)]

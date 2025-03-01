@@ -164,9 +164,9 @@ libraries = {
 
 [node name="SpeedLabel" type="Label" parent="Control"]
 layout_mode = 0
-offset_left = 678.081
-offset_top = 437.59
-offset_right = 743.081
-offset_bottom = 460.59
+offset_left = 458.918
+offset_top = 303.739
+offset_right = 523.918
+offset_bottom = 326.739
 text = "Speed: 0"
 label_settings = ExtResource("8_ngxi4")
