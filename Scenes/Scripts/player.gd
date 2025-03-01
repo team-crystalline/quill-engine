@@ -2,7 +2,6 @@ extends CharacterBody3D
 
 @onready var model = $Sonic
 @onready var jumpModel = $JumpModel
-
 # -------- Sonic's Properties ---------- #
 
 @export_category("Sonic's Properties")
@@ -26,6 +25,7 @@ extends CharacterBody3D
 @export var air_acceleration_rate : float = 0
 @export var air_deceleration_rate : float = 0
 @export var air_top_speed : float = 300
+var floor_normal = Vector3.UP
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity") * 2
 
 # -------------------------------------- #
@@ -75,24 +75,15 @@ func is_moving():
 func _physics_process(delta: float) -> void:
 	var input_dir := Input.get_vector("Left", "Right", "Forward", "Backward")
 	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
-	# Add the gravity.
+
+	# Add gravity.
 	if not is_on_floor():
 		velocity.y -= gravity * delta
-		#model.visible=false
-		#jumpModel.visible=true
-	else:
-		model.visible = true
-		jumpModel.visible =false
-		# Apply stickiness when on the floor
-		if velocity.y < 0:  # Only apply stickiness if falling
-			velocity.y = max(velocity.y, -stickiness_factor)  # Limit downward velocity
-
 	# Handle jump.
 	if Input.is_action_just_pressed("Jump") and is_on_floor():
 		velocity.y = max_jump_height
-		#jump_sound.play()
-	
-		# Handle Spin Dash
+
+	# Handle Spin Dash
 	if Input.is_action_just_pressed("SpinDash") and is_on_floor() and not is_spinning:
 		print("Spin Dash!")
 		is_spinning = true
@@ -105,14 +96,10 @@ func _physics_process(delta: float) -> void:
 		if spin_dash_timer <= 0:
 			is_spinning = false
 
-
 	if is_moving():
 		# Look in the right direction.
 		var look_direction = Vector2(velocity.z, velocity.x)
 		model.rotation.y = lerp_angle(model.rotation.y, look_direction.angle(), delta * 8)
-	else:
-		# Reset current speed. Momentum must be built up again.
-		current_speed = 0
 
 	if direction:
 		# Calculate target speed based on input
@@ -125,13 +112,6 @@ func _physics_process(delta: float) -> void:
 		if is_on_floor():
 			if target_speed > current_speed:
 				current_speed = min(current_speed + acceleration_rate * delta, target_speed)
-			else:
-				# Adjust deceleration based on current speed
-				var effective_deceleration = deceleration_rate * (current_speed / top_speed)
-				if current_speed < quick_stop_threshold * top_speed:
-					# Apply a higher deceleration rate for quick stops
-					effective_deceleration *= 2 # Adjust this multiplier as needed
-				current_speed = max(current_speed - effective_deceleration * delta, target_speed)
 		else:
 			# In the air, apply air acceleration
 			if target_speed > current_speed:
@@ -141,20 +121,15 @@ func _physics_process(delta: float) -> void:
 		velocity.x = direction.x * current_speed
 		velocity.z = direction.z * current_speed
 	else:
-		# Decelerate to a stop when no input is given
-		if is_on_floor():
-			# Adjust deceleration based on current speed
-			var effective_deceleration = deceleration_rate * (current_speed / top_speed)
-			if current_speed < quick_stop_threshold * top_speed:
-				# Apply a higher deceleration rate for quick stops
-				effective_deceleration *= .1 # Adjust this multiplier as needed
-			current_speed = max(current_speed - effective_deceleration * delta, 0)
-		else:
-			# In the air, apply air deceleration
-			current_speed = move_toward(current_speed, 0, air_deceleration_rate * delta)
+		current_speed = current_speed - deceleration_rate * delta
+		current_speed = max(current_speed, 0)
+		# Bug: Sonic slows down gradually (wanted), but pulls to a cardinal direction (unwanted)
+		velocity.x = direction.x - current_speed
+		velocity.z = direction.z - current_speed
+		print(velocity)
 
-	# Update velocity based on current speed
-	velocity.x = direction.x * current_speed
-	velocity.z = direction.z * current_speed
-
+	# Update the vertical velocity based on the floor normal
+	if is_on_floor():
+		velocity.y = max(0, velocity.y)  # Prevent upward movement when on the floor
+	# Move the character
 	move_and_slide()

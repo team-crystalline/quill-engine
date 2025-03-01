@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://b6osv3mvkgnwe"]
+[gd_scene load_steps=12 format=3 uid="uid://b6osv3mvkgnwe"]
 
 [ext_resource type="Script" path="res://HUD/GameUI.gd" id="1_yufsv"]
 [ext_resource type="Texture2D" uid="uid://bwthk5exts80n" path="res://HUD/sonic-head-icon2.png" id="2_bx78v"]
@@ -7,6 +7,34 @@
 [ext_resource type="Texture2D" uid="uid://xd8h0uovwpfy" path="res://HUD/ring.png" id="4_l5klh"]
 [ext_resource type="Script" path="res://HUD/timer_label.gd" id="6_1q1pj"]
 [ext_resource type="Texture2D" uid="uid://11nemdf4lr0w" path="res://HUD/spray-burst.png" id="7_8mp2j"]
+[ext_resource type="LabelSettings" uid="uid://cnctkmh7e5ssr" path="res://HUD/HUD-Speed-font.tres" id="8_ngxi4"]
+
+[sub_resource type="Animation" id="Animation_nr7we"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("LivesHead:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(4, 13)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Ring:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(104.894, 15)]
+}
 
 [sub_resource type="Animation" id="Animation_5mh32"]
 resource_name = "float"
@@ -34,33 +62,6 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Vector2(104.894, 15), Vector2(104.433, 12.5026)]
-}
-
-[sub_resource type="Animation" id="Animation_nr7we"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("LivesHead:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(4, 13)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Ring:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(104.894, 15)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_mvjpm"]
@@ -101,6 +102,7 @@ text = "0"
 label_settings = ExtResource("3_vb3xy")
 
 [node name="Ring" type="TextureRect" parent="Control"]
+layout_mode = 0
 offset_left = 104.894
 offset_top = 15.0
 offset_right = 1078.89
@@ -110,6 +112,7 @@ scale = Vector2(0.0186224, 0.0186224)
 texture = ExtResource("4_l5klh")
 
 [node name="RingsLabel" type="Label" parent="Control"]
+layout_mode = 0
 offset_left = 122.894
 offset_top = 7.15696
 offset_right = 168.894
@@ -158,3 +161,12 @@ metadata/_edit_lock_ = true
 libraries = {
 "": SubResource("AnimationLibrary_mvjpm")
 }
+
+[node name="SpeedLabel" type="Label" parent="Control"]
+layout_mode = 0
+offset_left = 678.081
+offset_top = 437.59
+offset_right = 743.081
+offset_bottom = 460.59
+text = "Speed: 0"
+label_settings = ExtResource("8_ngxi4")

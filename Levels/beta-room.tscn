@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://dwwtric7hy7cc"]
+[gd_scene load_steps=14 format=3 uid="uid://dwwtric7hy7cc"]
 
 [ext_resource type="PackedScene" uid="uid://x22uvm26pxmr" path="res://models/Levels/rh_1_c.tscn" id="1_hwng4"]
 [ext_resource type="PackedScene" uid="uid://dr5h4igk1uk1x" path="res://Scenes/player.tscn" id="1_kt776"]
@@ -20,6 +20,23 @@ sky_material = SubResource("ProceduralSkyMaterial_nbokb")
 background_mode = 2
 sky = SubResource("Sky_vkamw")
 
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_sjmm1"]
+frequency = 1.0
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_wql3e"]
+noise = SubResource("FastNoiseLite_sjmm1")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_iurb1"]
+albedo_color = Color(0.36, 0.36, 0.36, 1)
+roughness_texture = SubResource("NoiseTexture2D_wql3e")
+
+[sub_resource type="BoxMesh" id="BoxMesh_vlako"]
+material = SubResource("StandardMaterial3D_iurb1")
+size = Vector3(100, 0.5, 9000)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_v0cwq"]
+size = Vector3(100, 0.5, 9000)
+
 [node name="Beta-room" type="Node3D" groups=["Daytime", "Level"]]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -29,13 +46,23 @@ environment = SubResource("Environment_mbi2w")
 transform = Transform3D(0.386753, -0.0810601, 0.918614, -0.899853, 0.184711, 0.395154, -0.201709, -0.979444, -0.00150465, -177.034, 69.3657, 1.52588e-05)
 shadow_enabled = true
 
-[node name="Level" type="Node3D" parent="."]
+[node name="Flat Road" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 501.116, 0, 0)
 
-[node name="RH1-C" parent="Level" instance=ExtResource("1_hwng4")]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Flat Road"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3894.96)
+mesh = SubResource("BoxMesh_vlako")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Flat Road"]
+shape = SubResource("BoxShape3D_v0cwq")
+
+[node name="Terrain Level" type="Node3D" parent="."]
+
+[node name="RH1-C" parent="Terrain Level" instance=ExtResource("1_hwng4")]
 transform = Transform3D(25, 0, 0, 0, 25, 0, 0, 0, 25, 0, -100.283, 0)
 
 [node name="Player" parent="." instance=ExtResource("1_kt776")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.400249, -34.4079, 317.222)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 488.215, 0.575068, 317.222)
 
 [node name="Hud" parent="." instance=ExtResource("3_4npk3")]
 

@@ -18,9 +18,9 @@ material = SubResource("StandardMaterial3D_lttlp")
 [node name="Player" type="CharacterBody3D" groups=["Player"]]
 script = ExtResource("1_bx745")
 stickiness_factor = 5.0
-move_speed = 256.0
+move_speed = 60.0
 top_speed = 200.0
-max_speed = 400.0
+max_speed = 256.0
 max_jump_height = 16.0
 
 [node name="Sonic" type="Node3D" parent="."]
@@ -35,7 +35,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00879997, 0.733579, -0.0363
 shape = SubResource("CapsuleShape3D_pjq45")
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.999992, -0.00401454, 0, 0.00401454, 0.999992, 0, 1.39094, 3.78038)
+transform = Transform3D(0.999943, 0.00970514, -0.00453351, -0.00922839, 0.995395, 0.0954169, 0.00543868, -0.0953696, 0.995427, 0, 1.77236, 2.64272)
 doppler_tracking = 1
 
 [node name="JumpModel" type="Node3D" parent="."]
