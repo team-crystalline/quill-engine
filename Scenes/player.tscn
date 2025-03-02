@@ -16,8 +16,8 @@ albedo_color = Color(0.078, 0.0954, 0.6, 1)
 material = SubResource("StandardMaterial3D_lttlp")
 
 [node name="Player" type="CharacterBody3D" groups=["Player"]]
+floor_snap_length = 1.0
 script = ExtResource("1_bx745")
-stickiness_factor = 5.0
 move_speed = 60.0
 top_speed = 200.0
 max_speed = 256.0

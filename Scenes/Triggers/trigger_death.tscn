@@ -1,0 +1,27 @@
+[gd_scene load_steps=5 format=3 uid="uid://fkdqos75ewnp"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_1vtm3"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gi85v"]
+albedo_texture = SubResource("PlaceholderTexture2D_1vtm3")
+
+[sub_resource type="BoxMesh" id="BoxMesh_ruaje"]
+material = SubResource("StandardMaterial3D_gi85v")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ugla8"]
+size = Vector3(1, 0.0184937, 1)
+
+[node name="TriggerDeath" type="StaticBody3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.00327, 0, 0, 0, 0.00479109, 0, 0, 0, 1.00327, 0, 0, 0)
+mesh = SubResource("BoxMesh_ruaje")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.00259399, 0)
+shape = SubResource("BoxShape3D_ugla8")
+
+[node name="Label3D" type="Label3D" parent="."]
+transform = Transform3D(0.653804, -0.756664, -3.30748e-08, 0, -4.37114e-08, 1, -0.756664, -0.653804, -2.85787e-08, 0, 0.00821054, 0)
+pixel_size = 0.004
+text = "TRIGGER_DEATH"

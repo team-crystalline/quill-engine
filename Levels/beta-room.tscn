@@ -1,10 +1,13 @@
-[gd_scene load_steps=14 format=3 uid="uid://dwwtric7hy7cc"]
+[gd_scene load_steps=21 format=3 uid="uid://dwwtric7hy7cc"]
 
-[ext_resource type="PackedScene" uid="uid://x22uvm26pxmr" path="res://models/Levels/rh_1_c.tscn" id="1_hwng4"]
 [ext_resource type="PackedScene" uid="uid://dr5h4igk1uk1x" path="res://Scenes/player.tscn" id="1_kt776"]
+[ext_resource type="Script" path="res://Scenes/Scripts/room.gd" id="1_wwecs"]
 [ext_resource type="PackedScene" uid="uid://b6osv3mvkgnwe" path="res://HUD/HUD.tscn" id="3_4npk3"]
 [ext_resource type="PackedScene" uid="uid://clu4noec3auv1" path="res://Scenes/ring.tscn" id="4_cnk0h"]
+[ext_resource type="Texture2D" uid="uid://1mmgbbbfb0id" path="res://Graphics/Textures/Placeholders/Dark/texture_12.png" id="4_hynl2"]
 [ext_resource type="PackedScene" uid="uid://dtojkni8rqwp8" path="res://Scenes/Objects/spring.tscn" id="5_jkkhu"]
+[ext_resource type="Texture2D" uid="uid://b81y0j6p5n4c5" path="res://Graphics/Textures/Placeholders/Dark/texture_10.png" id="5_xl2xh"]
+[ext_resource type="Texture2D" uid="uid://djw07vbieucg6" path="res://Graphics/Textures/Placeholders/Orange/texture_05.png" id="6_dbcxi"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_nbokb"]
 sky_top_color = Color(0.333936, 0.576756, 0.779791, 1)
@@ -20,72 +23,152 @@ sky_material = SubResource("ProceduralSkyMaterial_nbokb")
 background_mode = 2
 sky = SubResource("Sky_vkamw")
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_sjmm1"]
-frequency = 1.0
+[sub_resource type="BoxShape3D" id="BoxShape3D_6pk5d"]
+size = Vector3(100, 0.5, 100)
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_wql3e"]
-noise = SubResource("FastNoiseLite_sjmm1")
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g4rcr"]
+albedo_texture = ExtResource("4_hynl2")
+uv1_scale = Vector3(256, 256, 256)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_iurb1"]
-albedo_color = Color(0.36, 0.36, 0.36, 1)
-roughness_texture = SubResource("NoiseTexture2D_wql3e")
+[sub_resource type="BoxMesh" id="BoxMesh_g6l24"]
+material = SubResource("StandardMaterial3D_g4rcr")
+size = Vector3(100, 0.5, 100)
 
-[sub_resource type="BoxMesh" id="BoxMesh_vlako"]
-material = SubResource("StandardMaterial3D_iurb1")
-size = Vector3(100, 0.5, 9000)
+[sub_resource type="BoxShape3D" id="BoxShape3D_tujvn"]
+size = Vector3(100, 0.5, 25.001)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_v0cwq"]
-size = Vector3(100, 0.5, 9000)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wphum"]
+albedo_texture = ExtResource("5_xl2xh")
+uv1_scale = Vector3(256, 64, 256)
+
+[sub_resource type="BoxMesh" id="BoxMesh_0plyd"]
+material = SubResource("StandardMaterial3D_wphum")
+size = Vector3(100, 0.5, 25)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_g2mns"]
+size = Vector3(25, 0.5, 100)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_esu2q"]
+albedo_texture = ExtResource("6_dbcxi")
+uv1_scale = Vector3(96, 256, 256)
+
+[sub_resource type="BoxMesh" id="BoxMesh_sjguf"]
+material = SubResource("StandardMaterial3D_esu2q")
+size = Vector3(25, 0.5, 100)
 
 [node name="Beta-room" type="Node3D" groups=["Daytime", "Level"]]
+editor_description = "The parent node to the level."
+script = ExtResource("1_wwecs")
+metadata/LevelName = "Beta Room"
+
+[node name="Hud" parent="." instance=ExtResource("3_4npk3")]
+
+[node name="Player" parent="." instance=ExtResource("1_kt776")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.9682, 0.402198, 14.6864)
+wall_min_slide_angle = 1.59523
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_mbi2w")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
-transform = Transform3D(0.386753, -0.0810601, 0.918614, -0.899853, 0.184711, 0.395154, -0.201709, -0.979444, -0.00150465, -177.034, 69.3657, 1.52588e-05)
+transform = Transform3D(1, 0, 0, 0, -0.65449, 0.756071, 0, -0.756071, -0.65449, 0, 57.2098, 0)
 shadow_enabled = true
 
-[node name="Flat Road" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 501.116, 0, 0)
+[node name="Spawn Point" type="Node3D" parent="WorldEnvironment"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.963, 0.25, 0)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Flat Road"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3894.96)
-mesh = SubResource("BoxMesh_vlako")
+[node name="Level Objects" type="Node3D" parent="."]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Flat Road"]
-shape = SubResource("BoxShape3D_v0cwq")
+[node name="Floor" type="StaticBody3D" parent="Level Objects"]
 
-[node name="Terrain Level" type="Node3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Level Objects/Floor"]
+shape = SubResource("BoxShape3D_6pk5d")
 
-[node name="RH1-C" parent="Terrain Level" instance=ExtResource("1_hwng4")]
-transform = Transform3D(25, 0, 0, 0, 25, 0, 0, 0, 25, 0, -100.283, 0)
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Level Objects/Floor"]
+mesh = SubResource("BoxMesh_g6l24")
 
-[node name="Player" parent="." instance=ExtResource("1_kt776")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.2983, -30.5196, 347.727)
+[node name="Terrain Level2" type="StaticBody3D" parent="Level Objects"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -49.4085)
 
-[node name="Hud" parent="." instance=ExtResource("3_4npk3")]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Level Objects/Terrain Level2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.2186)
+shape = SubResource("BoxShape3D_tujvn")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Level Objects/Terrain Level2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.2105)
+mesh = SubResource("BoxMesh_0plyd")
+
+[node name="Terrain Level3" type="StaticBody3D" parent="Level Objects"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 48.6014)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Level Objects/Terrain Level3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.4385)
+shape = SubResource("BoxShape3D_tujvn")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Level Objects/Terrain Level3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.2105)
+mesh = SubResource("BoxMesh_0plyd")
+
+[node name="Terrain Level4" type="StaticBody3D" parent="Level Objects"]
+transform = Transform3D(-4.37114e-08, -1, 4.37114e-08, 0, -4.37114e-08, -1, 1, -4.37114e-08, 1.91069e-15, 49.0007, 0, -1.04758)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Level Objects/Terrain Level4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.2186)
+shape = SubResource("BoxShape3D_tujvn")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Level Objects/Terrain Level4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.2105)
+mesh = SubResource("BoxMesh_0plyd")
+
+[node name="Terrain Level5" type="StaticBody3D" parent="Level Objects"]
+transform = Transform3D(-4.37114e-08, -1, 4.37114e-08, 0, -4.37114e-08, -1, 1, -4.37114e-08, 1.91069e-15, -49.0007, 0, 0.240459)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Level Objects/Terrain Level5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.4385)
+shape = SubResource("BoxShape3D_tujvn")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Level Objects/Terrain Level5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.2105)
+mesh = SubResource("BoxMesh_0plyd")
+
+[node name="Ramp" type="StaticBody3D" parent="Level Objects"]
+transform = Transform3D(1, 0, 0, 0, 0.83429, -0.551326, 0, 0.551326, 0.83429, -33.9714, 27.3725, -30.0849)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Level Objects/Ramp"]
+shape = SubResource("BoxShape3D_g2mns")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Level Objects/Ramp"]
+mesh = SubResource("BoxMesh_sjguf")
+
+[node name="Floor2" type="StaticBody3D" parent="Level Objects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.27167, 54.1684, -121.759)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Level Objects/Floor2"]
+shape = SubResource("BoxShape3D_6pk5d")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Level Objects/Floor2"]
+mesh = SubResource("BoxMesh_g6l24")
 
 [node name="Rings" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -33.6833, 307.306)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.52499, 6.18185)
 
 [node name="Ring" parent="Rings" instance=ExtResource("4_cnk0h")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0935, -0.131027, 3.76816)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.47386, -0.819237, -17.3034)
 
 [node name="Ring2" parent="Rings" instance=ExtResource("4_cnk0h")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0935, -0.131027, 2.66898)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.47386, -0.819237, -18.4026)
 
 [node name="Ring3" parent="Rings" instance=ExtResource("4_cnk0h")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0935, -0.131027, 1.50699)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.47386, -0.819237, -19.5646)
 
 [node name="Ring4" parent="Rings" instance=ExtResource("4_cnk0h")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0935, -0.131027, 0.370483)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.47386, -0.819237, -20.7011)
 
 [node name="Ring5" parent="Rings" instance=ExtResource("4_cnk0h")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0935, -0.131027, -0.946686)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.47386, -0.819237, -22.0183)
 
 [node name="Ring6" parent="Rings" instance=ExtResource("4_cnk0h")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0935, -0.131027, -2.49405)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.47386, -0.819237, -23.5657)
 
 [node name="Ring7" parent="Rings" instance=ExtResource("4_cnk0h")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.51308, -0.755348, -17.3503)
@@ -105,16 +188,18 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.51308, -0.755348, -22.0652
 [node name="Ring12" parent="Rings" instance=ExtResource("4_cnk0h")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.51308, -0.755348, -23.6125)
 
-[node name="Springs" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.1022, -42.6304, 262.689)
+[node name="Objects" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.1022, -5.90111, -38.4352)
 
-[node name="Spring" parent="Springs" instance=ExtResource("5_jkkhu")]
+[node name="Spring" parent="Objects" instance=ExtResource("5_jkkhu")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.51787, 6.01646, 15.6595)
 
-[node name="Spring2" parent="Springs" instance=ExtResource("5_jkkhu")]
+[node name="Spring2" parent="Objects" instance=ExtResource("5_jkkhu")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.0749, 6.01646, 15.2654)
 strength = 2
 
-[node name="Spring3" parent="Springs" instance=ExtResource("5_jkkhu")]
+[node name="Spring3" parent="Objects" instance=ExtResource("5_jkkhu")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.586442, 6.01646, 15.6595)
 strength = 3
+
+[node name="Triggers" type="Node3D" parent="."]

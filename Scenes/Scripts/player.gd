@@ -55,12 +55,13 @@ func update_rotation(axis: int, floor_normal_value: float) -> void:
 		match axis:
 			# + floor_normal_value
 			0: model.rotation.x = floor_normal_value
-			1: model.rotation.y = floor_normal_value # Should be unused unless wall running?
+			1: model.rotation.y += max(floor_normal_value, 0)
 			2: model.rotation.z = floor_normal_value
-	#print("Model should be rotated:", model.rotation)
+		print(model.rotation.y)
 
 func _ready() -> void:
 	print("Sonic's the name, speed's my game!")
+	model.rotation = Vector3(0, deg_to_rad(180), 0)
 	var level_groups = level.get_groups()
 	if level.is_in_group("Morning") or level.is_in_group("Daytime") or level.is_in_group("Afternoon"):
 		print("It's daytime. I don't need my spotlight.")
@@ -79,6 +80,8 @@ func _physics_process(delta: float) -> void:
 	# Add gravity.
 	if not is_on_floor():
 		velocity.y -= gravity * delta
+	else:
+		velocity.y = max(velocity.y, -stickiness_factor)  # Prevent upward movement
 	# Handle jump.
 	if Input.is_action_just_pressed("Jump") and is_on_floor():
 		velocity.y = max_jump_height
@@ -139,11 +142,5 @@ func _physics_process(delta: float) -> void:
 			# Clamp velocity.z to 0 if it goes below 0
 			if (sign(velocity.z) != sign(velocity.z + (deceleration_rate / 10))):
 				velocity.z = 0
-
-	print("----")
-	print(current_speed)
-	print("Velocity: ")
-	print(velocity)
-	print("----")
 	# Move the character
 	move_and_slide()

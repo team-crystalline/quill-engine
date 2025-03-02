@@ -14,5 +14,4 @@ func _process(delta: float) -> void:
 	var speed = player.current_speed
 	ringLabel.text= "%d" % player.rings
 	livesLabel.text= "%d" % player.lives
-	#print(player.velocity)
-	$SpeedLabel.text = "Velocity: \n(x:%s, y:%s, z:%s)" % [str(player.velocity.x), str(player.velocity.y), str(player.velocity.z)]
+	$ModelStatsLabel.text = "Rotation:\n" + str(round(player.model.rotation * 100) / 100) + "\n\n" + "Velocity:\n" + str(round(player.velocity * 100) / 100) + "\n\n" +"Speed:\n" + str(round(player.current_speed * 100) / 100)

@@ -124,4 +124,11 @@ color_ramp = SubResource("Gradient_u3d5s")
 hue_variation_min = 0.03
 hue_variation_max = 0.03
 
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+light_color = Color(1, 0.918, 0.59, 1)
+light_energy = 0.417
+light_volumetric_fog_energy = 1.5
+omni_range = 0.745
+omni_shadow_mode = 0
+
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
