@@ -38,7 +38,7 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity") * 2
 
 # Spin Dash properties
 var is_spinning: bool = false
-var spin_dash_speed: float = 150 # Speed during Spin Dash
+var spin_dash_speed: float = 60 # Speed during Spin Dash
 var spin_dash_duration: float = 1.0 # Duration of the Spin Dash
 var spin_dash_timer: float = 0.0 # Timer for Spin Dash
 
@@ -52,16 +52,15 @@ func update_rotation(axis: int, floor_normal_value: float) -> void:
 			2: model.rotation.z = 0  # Upright for z-axis
 	else:
 		# Update rotation with clamping
+		print(str(floor_normal_value) + " | " + str(axis))
 		match axis:
 			# + floor_normal_value
 			0: model.rotation.x = floor_normal_value
-			1: model.rotation.y += max(floor_normal_value, 0)
+			1: model.rotation.y = floor_normal_value
 			2: model.rotation.z = floor_normal_value
-		print(model.rotation.y)
 
 func _ready() -> void:
 	print("Sonic's the name, speed's my game!")
-	model.rotation = Vector3(0, deg_to_rad(180), 0)
 	var level_groups = level.get_groups()
 	if level.is_in_group("Morning") or level.is_in_group("Daytime") or level.is_in_group("Afternoon"):
 		print("It's daytime. I don't need my spotlight.")
@@ -109,8 +108,9 @@ func _physics_process(delta: float) -> void:
 		# Calculate target speed based on input
 		var target_speed = direction.length() * move_speed
 		var floor_normal = get_floor_normal()
-		update_rotation(0, floor_normal.x)  # X-axis
-		update_rotation(2, floor_normal.z)  # Z-axis
+		#update_rotation(0, floor_normal.x)  # X-axis
+		#update_rotation(1, floor_normal.y)  # Y-axis
+		#update_rotation(2, floor_normal.z)  # Z-axis
 
 		# Apply acceleration
 		if is_on_floor():

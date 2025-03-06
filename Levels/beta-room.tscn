@@ -64,7 +64,7 @@ metadata/LevelName = "Beta Room"
 [node name="Hud" parent="." instance=ExtResource("3_4npk3")]
 
 [node name="Player" parent="." instance=ExtResource("1_kt776")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.9682, 0.402198, 14.6864)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3118, 0)
 wall_min_slide_angle = 1.59523
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -132,7 +132,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.2105)
 mesh = SubResource("BoxMesh_0plyd")
 
 [node name="Ramp" type="StaticBody3D" parent="Level Objects"]
-transform = Transform3D(1, 0, 0, 0, 0.83429, -0.551326, 0, 0.551326, 0.83429, -33.9714, 27.3725, -30.0849)
+transform = Transform3D(1, 0, 0, 0, 0.819152, -0.573576, 0, 0.573576, 0.819152, -33.9714, 27.3725, -33.4532)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Level Objects/Ramp"]
 shape = SubResource("BoxShape3D_g2mns")
