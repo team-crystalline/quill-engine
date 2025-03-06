@@ -64,7 +64,7 @@ metadata/LevelName = "Beta Room"
 [node name="Hud" parent="." instance=ExtResource("3_4npk3")]
 
 [node name="Player" parent="." instance=ExtResource("1_kt776")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3118, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24.7665, 0.3118, 8.88792)
 wall_min_slide_angle = 1.59523
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]

@@ -42,22 +42,23 @@ var spin_dash_speed: float = 60 # Speed during Spin Dash
 var spin_dash_duration: float = 1.0 # Duration of the Spin Dash
 var spin_dash_timer: float = 0.0 # Timer for Spin Dash
 
-func update_rotation(axis: int, floor_normal_value: float) -> void:
-	# Check if the slope normal for the given axis is 0
-	if floor_normal_value == 0:
-		# Snap back to upright position
-		match axis:
-			0: model.rotation.x = 0  # Upright for x-axis
-			1: model.rotation.y = 0  # Upright for y-axis
-			2: model.rotation.z = 0  # Upright for z-axis
-	else:
-		# Update rotation with clamping
-		print(str(floor_normal_value) + " | " + str(axis))
-		match axis:
-			# + floor_normal_value
-			0: model.rotation.x = floor_normal_value
-			1: model.rotation.y = floor_normal_value
-			2: model.rotation.z = floor_normal_value
+#func update_rotation(floor_normal: Vector3) -> void:
+	## Calculate the target rotation angle based on the floor normal
+	#var target_rotation_x = -floor_normal.z  # Use the Z component for forward/backward tilt
+	#model.rotation.x = lerp_angle(model.rotation.x, target_rotation_x, 0.1)
+	#model.rotation.x = clamp(model.rotation.x, -PI / 4, PI / 4)
+func update_rotation(floor_normal: Vector3) -> void:
+	var target_rotation_x = -floor_normal.z  # Use the Z component for forward tilt
+	model.rotation.x = lerp_angle(model.rotation.x, target_rotation_x, 0.1)  # Smooth transition
+	model.rotation.x = clamp(model.rotation.x, -PI / 4, PI / 4)  # Limit tilt
+
+	# Ensure Sonic faces downhill
+	var forward_direction = Vector3(sin(model.rotation.y), 0, cos(model.rotation.y)).normalized()
+	var downhill_direction = Vector3(floor_normal.x, 0, floor_normal.z).normalized()
+
+	# Adjust rotation to face downhill
+	if forward_direction.dot(downhill_direction) > 0:  # If facing uphill
+		model.rotation.x = lerp_angle(model.rotation.x, downhill_direction.z, 0.1)
 
 func _ready() -> void:
 	print("Sonic's the name, speed's my game!")
@@ -108,9 +109,8 @@ func _physics_process(delta: float) -> void:
 		# Calculate target speed based on input
 		var target_speed = direction.length() * move_speed
 		var floor_normal = get_floor_normal()
-		#update_rotation(0, floor_normal.x)  # X-axis
-		#update_rotation(1, floor_normal.y)  # Y-axis
-		#update_rotation(2, floor_normal.z)  # Z-axis
+		update_rotation(floor_normal)  # Pass the entire normal vector
+
 
 		# Apply acceleration
 		if is_on_floor():
