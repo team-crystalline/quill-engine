@@ -22,8 +22,8 @@ extends CharacterBody3D
 @export var jump_force : float = 1600
 var jump_time = 0.0  # Time the jump button is held down
 var is_jumping = false  # To track if the player is currently jumping
-@export var min_jump_height : float = 2
-@export var max_jump_height: float = 16
+@export var min_jump_height : float = 8
+@export var max_jump_height: float = 24
 @export var air_acceleration_rate : float = 0
 @export var air_deceleration_rate : float = 0
 @export var air_top_speed : float = 60
@@ -92,7 +92,7 @@ func _physics_process(delta: float) -> void:
 
 	if Input.is_action_pressed("Jump") and is_jumping and velocity.y < max_jump_height:
 		jump_time += get_physics_process_delta_time()
-		velocity.y = min_jump_height + (max_jump_height - min_jump_height) * (jump_time / 0.5)
+		velocity.y = min_jump_height + (max_jump_height - min_jump_height) * (jump_time / 0.1)
 
 	if Input.is_action_just_released("Jump") or velocity.y >= max_jump_height:
 		is_jumping = false
