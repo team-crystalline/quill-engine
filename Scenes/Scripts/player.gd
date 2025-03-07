@@ -78,30 +78,25 @@ func _physics_process(delta: float) -> void:
 		velocity.y -= gravity * delta
 	else:
 		velocity.y = max(velocity.y, -stickiness_factor)  # Prevent upward movement
-	# Handle jump.
-	#if Input.is_action_just_pressed("Jump") and is_on_floor():
-		#velocity.y = max_jump_height
-		
+
 	# Handle jump.
 	if Input.is_action_just_pressed("Jump") and is_on_floor():
-		print("Boing")
 		is_jumping = true
-		jump_time = 0.0  # Reset jump time
-		velocity.y = -jump_force  # Apply initial jump force
-
-	# If the jump button is held down and the player is jumping
-	if is_jumping:
-		jump_time += delta
-		# Limit the jump height based on how long the button is pressed
-		if jump_time < max_jump_height / jump_force:
-			velocity.y = -jump_force * (1 - (jump_time * jump_force / max_jump_height))
-		else:
-			velocity.y = -max_jump_height  # Cap the jump height
-
-	# Reset jump state when the player is on the floor
-	if is_on_floor():
-		is_jumping = false
 		jump_time = 0.0
+
+	# Handle jump.
+	if Input.is_action_just_pressed("Jump") and is_on_floor():
+		is_jumping = true
+		jump_time = 0.0
+		velocity.y = min_jump_height
+
+	if Input.is_action_pressed("Jump") and is_jumping and velocity.y < max_jump_height:
+		jump_time += get_physics_process_delta_time()
+		velocity.y = min_jump_height + (max_jump_height - min_jump_height) * (jump_time / 0.5)
+
+	if Input.is_action_just_released("Jump") or velocity.y >= max_jump_height:
+		is_jumping = false
+
 	# Handle Spin Dash
 	if Input.is_action_just_pressed("SpinDash") and is_on_floor() and not is_spinning:
 		print("Spin Dash!")
