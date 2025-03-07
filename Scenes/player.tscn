@@ -1,21 +1,27 @@
-[gd_scene load_steps=11 format=3 uid="uid://dr5h4igk1uk1x"]
+[gd_scene load_steps=13 format=3 uid="uid://dr5h4igk1uk1x"]
 
 [ext_resource type="Script" path="res://Scenes/Scripts/player.gd" id="1_bx745"]
+[ext_resource type="Script" path="res://Scenes/Scripts/camera_pivot.gd" id="2_dm72f"]
 [ext_resource type="AudioStream" uid="uid://duwrvp8lmogj0" path="res://Audio/FX/ring.ogg" id="3_s2ogt"]
 [ext_resource type="AudioStream" uid="uid://6awa70y4vryu" path="res://Audio/FX/jump.ogg" id="4_p63kn"]
 
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_4y0hj"]
+frequency = 0.0562
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_37f5k"]
+noise = SubResource("FastNoiseLite_4y0hj")
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cb1fg"]
 albedo_color = Color(0.328, 0.3854, 0.82, 1)
+albedo_texture = SubResource("NoiseTexture2D_37f5k")
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_blown"]
 material = SubResource("StandardMaterial3D_cb1fg")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rjs8r"]
-albedo_color = Color(1, 0.7975, 0.55, 1)
-
-[sub_resource type="BoxMesh" id="BoxMesh_e1lvj"]
-material = SubResource("StandardMaterial3D_rjs8r")
-size = Vector3(0.5, 0.5, 0.15)
+[sub_resource type="CylinderMesh" id="CylinderMesh_guixs"]
+top_radius = 0.25
+bottom_radius = 0.25
+height = 0.15
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_pjq45"]
 radius = 0.261054
@@ -32,25 +38,29 @@ floor_snap_length = 1.0
 script = ExtResource("1_bx745")
 
 [node name="Sonic" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.963517, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.963517, 0.562514)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Sonic"]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -0.00794961, 0, -0.499934)
 mesh = SubResource("CapsuleMesh_blown")
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="Sonic"]
-transform = Transform3D(-1.10346, 0, 2.24716e-07, 0, 0.741728, 0, -9.64679e-08, 0, -2.57045, 0.00794961, 0.462719, -0.000126407)
-mesh = SubResource("BoxMesh_e1lvj")
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.287023, 0.0227226)
+mesh = SubResource("CylinderMesh_guixs")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00879997, 0.733579, -0.0363729)
-shape = SubResource("CapsuleShape3D_pjq45")
+[node name="CameraPivot" type="Node3D" parent="."]
+script = ExtResource("2_dm72f")
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(0.594823, 0, 0, 0, 0.594823, 0, 0, 0, 0.594823, 0.0997639, 1.32975, 2.9983)
+[node name="Camera3D" type="Camera3D" parent="CameraPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.76443, 3.91451)
 doppler_tracking = 1
 
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00879997, 0.811019, 0.0235649)
+shape = SubResource("CapsuleShape3D_pjq45")
+
 [node name="JumpModel" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.22158, 0)
 visible = false
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="JumpModel"]

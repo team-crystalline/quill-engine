@@ -23,7 +23,7 @@ extends CharacterBody3D
 var jump_time = 0.0  # Time the jump button is held down
 var is_jumping = false  # To track if the player is currently jumping
 @export var min_jump_height : float = 8
-@export var max_jump_height: float = 24
+@export var max_jump_height: float = 32
 @export var air_acceleration_rate : float = 0
 @export var air_deceleration_rate : float = 0
 @export var air_top_speed : float = 60
@@ -71,24 +71,28 @@ func is_moving():
 
 func _physics_process(delta: float) -> void:
 	var input_dir := Input.get_vector("Left", "Right", "Forward", "Backward")
-	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
-
+	# Normalize the input direction
+	input_dir = input_dir.normalized()
+	var camera = $CameraPivot/Camera3D
+	var camera_basis = camera.global_transform.basis
+	# This moves the player based on camera rotation.
+	var direction = (camera_basis.x * input_dir.x + camera_basis.z * input_dir.y).normalized()
+	
 	# Add gravity.
 	if not is_on_floor():
 		velocity.y -= gravity * delta
 	else:
 		velocity.y = max(velocity.y, -stickiness_factor)  # Prevent upward movement
-
-	# Handle jump.
-	if Input.is_action_just_pressed("Jump") and is_on_floor():
-		is_jumping = true
-		jump_time = 0.0
+		model.visible= true
+		jumpModel.visible = false
 
 	# Handle jump.
 	if Input.is_action_just_pressed("Jump") and is_on_floor():
 		is_jumping = true
 		jump_time = 0.0
 		velocity.y = min_jump_height
+		model.visible= false
+		jumpModel.visible = true
 
 	if Input.is_action_pressed("Jump") and is_jumping and velocity.y < max_jump_height:
 		jump_time += get_physics_process_delta_time()
@@ -110,6 +114,10 @@ func _physics_process(delta: float) -> void:
 		spin_dash_timer -= delta
 		if spin_dash_timer <= 0:
 			is_spinning = false
+			
+	# Special Action 1
+	if Input.is_action_just_pressed("SpecialMove1"):
+		$CameraPivot.orbit_camera("trigger4")
 
 	if is_moving():
 		# Look in the right direction.
