@@ -4,7 +4,7 @@ extends CharacterBody3D
 @onready var jumpModel = $JumpModel
 # -------- Sonic's Properties ---------- #
 
-@export_category("Sonic's Properties")
+@export_category("Player Properties")
 @export var rings : int = 0
 @export var lives : int = 3
 @export_group("Ground Physics")
@@ -14,17 +14,19 @@ extends CharacterBody3D
 @export var jump_limit : int = 2
 @export var current_speed : float = 0 # Current speed of the player
 @export var acceleration_rate : float = 7 # Rate of acceleration
-@export var deceleration_rate : float = 20 # Base rate of deceleration
+@export var deceleration_rate : float = 10 # Base rate of deceleration
 @export var quick_stop_threshold : float = 0.1 # 10% of top speed
 @export var top_speed : float = 100 # Fastest speed he can run without help + momentum
 @export var max_speed : float = 200 # Fastest speed he can run with help + momentum
 @export_group("Air Physics")
-@export var jump_force : float = 16
+@export var jump_force : float = 1600
+var jump_time = 0.0  # Time the jump button is held down
+var is_jumping = false  # To track if the player is currently jumping
 @export var min_jump_height : float = 2
-@export var max_jump_height: float = 10
+@export var max_jump_height: float = 16
 @export var air_acceleration_rate : float = 0
 @export var air_deceleration_rate : float = 0
-@export var air_top_speed : float = 300
+@export var air_top_speed : float = 60
 var floor_normal = Vector3.UP
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity") * 2
 
@@ -42,22 +44,16 @@ var spin_dash_speed: float = 60 # Speed during Spin Dash
 var spin_dash_duration: float = 1.0 # Duration of the Spin Dash
 var spin_dash_timer: float = 0.0 # Timer for Spin Dash
 
-#func update_rotation(floor_normal: Vector3) -> void:
-	## Calculate the target rotation angle based on the floor normal
-	#var target_rotation_x = -floor_normal.z  # Use the Z component for forward/backward tilt
-	#model.rotation.x = lerp_angle(model.rotation.x, target_rotation_x, 0.1)
-	#model.rotation.x = clamp(model.rotation.x, -PI / 4, PI / 4)
 func update_rotation(floor_normal: Vector3) -> void:
-	var target_rotation_x = -floor_normal.z  # Use the Z component for forward tilt
-	model.rotation.x = lerp_angle(model.rotation.x, target_rotation_x, 0.1)  # Smooth transition
-	model.rotation.x = clamp(model.rotation.x, -PI / 4, PI / 4)  # Limit tilt
+	var target_rotation_x = -floor_normal.z
+	model.rotation.x = lerp_angle(model.rotation.x, target_rotation_x, 0.1)
+	model.rotation.x = clamp(model.rotation.x, -PI / 4, PI / 4)
 
-	# Ensure Sonic faces downhill
 	var forward_direction = Vector3(sin(model.rotation.y), 0, cos(model.rotation.y)).normalized()
 	var downhill_direction = Vector3(floor_normal.x, 0, floor_normal.z).normalized()
 
-	# Adjust rotation to face downhill
-	if forward_direction.dot(downhill_direction) > 0:  # If facing uphill
+	# For going downhill
+	if forward_direction.dot(downhill_direction) > 0:
 		model.rotation.x = lerp_angle(model.rotation.x, downhill_direction.z, 0.1)
 
 func _ready() -> void:
@@ -83,9 +79,29 @@ func _physics_process(delta: float) -> void:
 	else:
 		velocity.y = max(velocity.y, -stickiness_factor)  # Prevent upward movement
 	# Handle jump.
+	#if Input.is_action_just_pressed("Jump") and is_on_floor():
+		#velocity.y = max_jump_height
+		
+	# Handle jump.
 	if Input.is_action_just_pressed("Jump") and is_on_floor():
-		velocity.y = max_jump_height
+		print("Boing")
+		is_jumping = true
+		jump_time = 0.0  # Reset jump time
+		velocity.y = -jump_force  # Apply initial jump force
 
+	# If the jump button is held down and the player is jumping
+	if is_jumping:
+		jump_time += delta
+		# Limit the jump height based on how long the button is pressed
+		if jump_time < max_jump_height / jump_force:
+			velocity.y = -jump_force * (1 - (jump_time * jump_force / max_jump_height))
+		else:
+			velocity.y = -max_jump_height  # Cap the jump height
+
+	# Reset jump state when the player is on the floor
+	if is_on_floor():
+		is_jumping = false
+		jump_time = 0.0
 	# Handle Spin Dash
 	if Input.is_action_just_pressed("SpinDash") and is_on_floor() and not is_spinning:
 		print("Spin Dash!")

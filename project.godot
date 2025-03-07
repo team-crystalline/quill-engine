@@ -18,7 +18,7 @@ run/main_scene="res://Levels/beta-room.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 boot_splash/bg_color=Color(0.121079, 0.105386, 0.299341, 1)
 boot_splash/image="res://Icon.png"
-config/icon="res://icon.svg"
+config/icon="res://Icon.svg"
 
 [editor_plugins]
 

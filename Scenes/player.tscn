@@ -30,7 +30,6 @@ material = SubResource("StandardMaterial3D_lttlp")
 [node name="Player" type="CharacterBody3D" groups=["Player"]]
 floor_snap_length = 1.0
 script = ExtResource("1_bx745")
-max_jump_height = 16.0
 
 [node name="Sonic" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.963517, 0)
