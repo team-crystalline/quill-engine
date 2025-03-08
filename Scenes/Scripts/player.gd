@@ -29,8 +29,6 @@ var is_jumping = false  # To track if the player is currently jumping
 @export var air_top_speed : float = 60
 var floor_normal = Vector3.UP
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity") * 2
-
-# -------------------------------------- #
 # -------------------------------------- #
 # Sounds
 @onready var jump_sound = $JumpSound
@@ -44,6 +42,20 @@ var spin_dash_speed: float = 60 # Speed during Spin Dash
 var spin_dash_duration: float = 1.0 # Duration of the Spin Dash
 var spin_dash_timer: float = 0.0 # Timer for Spin Dash
 
+func is_downhill(forward_direction: Vector3, downhill_direction: Vector3):
+	if forward_direction.dot(downhill_direction) > 0:
+		#print("downhill!")
+		return true
+	else:
+		#print("Not downhill")
+		return false
+
+# Function to check if the surface is flat
+func is_flat_surface() -> bool:
+	var floor_normal = get_floor_normal()
+	# Check if the Y component is close to 1 and X and Z components are close to 0
+	return abs(floor_normal.y) > 0.9 and abs(floor_normal.x) < 0.1 and abs(floor_normal.z) < 0.1
+
 func update_rotation(floor_normal: Vector3) -> void:
 	var target_rotation_x = -floor_normal.z
 	model.rotation.x = lerp_angle(model.rotation.x, target_rotation_x, 0.1)
@@ -53,7 +65,7 @@ func update_rotation(floor_normal: Vector3) -> void:
 	var downhill_direction = Vector3(floor_normal.x, 0, floor_normal.z).normalized()
 
 	# For going downhill
-	if forward_direction.dot(downhill_direction) > 0:
+	if is_downhill(forward_direction, downhill_direction):
 		model.rotation.x = lerp_angle(model.rotation.x, downhill_direction.z, 0.1)
 
 func _ready() -> void:
@@ -68,6 +80,7 @@ func _ready() -> void:
 
 func is_moving():
 	return abs(velocity.z) > 0 || abs(velocity.x) > 0
+
 
 func _physics_process(delta: float) -> void:
 	var input_dir := Input.get_vector("Left", "Right", "Forward", "Backward")
@@ -125,12 +138,27 @@ func _physics_process(delta: float) -> void:
 		model.rotation.y = lerp_angle(model.rotation.y, look_direction.angle(), delta * 8)
 
 	if direction:
+		var forward_direction = Vector3(sin(model.rotation.y), 0, cos(model.rotation.y)).normalized()
+		var downhill_direction = Vector3(floor_normal.x, 0, floor_normal.z).normalized()
 		# Calculate target speed based on input
 		var target_speed = direction.length() * move_speed
 		var floor_normal = get_floor_normal()
 		update_rotation(floor_normal)  # Pass the entire normal vector
 
-
+		# Read joystick input (assuming left stick)
+		var joystick_x = Input.get_joy_axis(0, 0)  # Left stick X-axis
+		var joystick_y = Input.get_joy_axis(0, 1)  # Left stick Y-axis
+		
+		# Normalize joystick input to get a direction vector
+		var joystick_input = Vector2(joystick_x, joystick_y).normalized()
+		print(joystick_input)
+		
+		#if is_flat_surface() and current_speed < (target_speed/3):
+			## Handle flat surface logic here
+			#print("Flat surface, slow")
+			#pass
+		#else:
+			#print("Not flat, or fast!")
 		# Apply acceleration
 		if is_on_floor():
 			if target_speed > current_speed:
