@@ -26,12 +26,12 @@ sky = SubResource("Sky_vkamw")
 [sub_resource type="BoxShape3D" id="BoxShape3D_6pk5d"]
 size = Vector3(100, 0.5, 100)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g4rcr"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f54df"]
 albedo_texture = ExtResource("4_ksxjb")
 uv1_scale = Vector3(64, 64, 64)
 
 [sub_resource type="BoxMesh" id="BoxMesh_g6l24"]
-material = SubResource("StandardMaterial3D_g4rcr")
+material = SubResource("StandardMaterial3D_f54df")
 size = Vector3(100, 0.5, 100)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_tujvn"]

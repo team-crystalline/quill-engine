@@ -9,15 +9,16 @@ extends CharacterBody3D
 @export var lives : int = 3
 @export_group("Ground Physics")
 @export var stickiness_factor: float = 0.1  # Adjust this value to control how much Sonic sticks to the ground
-@export var move_speed : float = 30
+@export var move_speed : float = 20
 @export var follow_lerp_factor : float = 16
 @export var jump_limit : int = 2
 @export var current_speed : float = 0 # Current speed of the player
 @export var acceleration_rate : float = 7 # Rate of acceleration
 @export var deceleration_rate : float = 10 # Base rate of deceleration
 @export var quick_stop_threshold : float = 0.1 # 10% of top speed
-@export var top_speed : float = 100 # Fastest speed he can run without help + momentum
-@export var max_speed : float = 200 # Fastest speed he can run with help + momentum
+@export var top_speed : float = 30 # Fastest speed he can run without help + momentum
+@export var max_speed : float = 80 # Fastest speed he can run with help + momentum
+@export var drag_factor : float = .5  # Adjust this value based on testing
 @export_group("Air Physics")
 @export var jump_force : float = 1600
 var jump_time = 0.0  # Time the jump button is held down
@@ -44,11 +45,12 @@ var spin_dash_timer: float = 0.0 # Timer for Spin Dash
 
 func is_downhill(forward_direction: Vector3, downhill_direction: Vector3):
 	if forward_direction.dot(downhill_direction) > 0:
-		#print("downhill!")
 		return true
 	else:
-		#print("Not downhill")
 		return false
+		
+func is_uphill(forward_direction: Vector3, floor_normal: Vector3) -> bool:
+	return forward_direction.dot(floor_normal) < 0
 
 # Function to check if the surface is flat
 func is_flat_surface() -> bool:
@@ -130,7 +132,7 @@ func _physics_process(delta: float) -> void:
 			
 	# Special Action 1
 	if Input.is_action_just_pressed("SpecialMove1"):
-		$CameraPivot.orbit_camera("trigger4")
+		$CameraPivot.orbit_camera("trigger1")
 
 	if is_moving():
 		# Look in the right direction.
@@ -138,27 +140,27 @@ func _physics_process(delta: float) -> void:
 		model.rotation.y = lerp_angle(model.rotation.y, look_direction.angle(), delta * 8)
 
 	if direction:
+		var floor_normal = get_floor_normal()  # Get the floor normal first
 		var forward_direction = Vector3(sin(model.rotation.y), 0, cos(model.rotation.y)).normalized()
 		var downhill_direction = Vector3(floor_normal.x, 0, floor_normal.z).normalized()
-		# Calculate target speed based on input
-		var target_speed = direction.length() * move_speed
-		var floor_normal = get_floor_normal()
-		update_rotation(floor_normal)  # Pass the entire normal vector
 
-		# Read joystick input (assuming left stick)
-		var joystick_x = Input.get_joy_axis(0, 0)  # Left stick X-axis
-		var joystick_y = Input.get_joy_axis(0, 1)  # Left stick Y-axis
+		var target_speed = direction.length() * move_speed
 		
-		# Normalize joystick input to get a direction vector
-		var joystick_input = Vector2(joystick_x, joystick_y).normalized()
-		print(joystick_input)
-		
-		#if is_flat_surface() and current_speed < (target_speed/3):
-			## Handle flat surface logic here
-			#print("Flat surface, slow")
-			#pass
-		#else:
-			#print("Not flat, or fast!")
+		if is_downhill(forward_direction, downhill_direction) and is_moving():
+			# Increase target speed when going downhill
+			target_speed = direction.length() * max_speed
+		elif is_uphill(forward_direction, floor_normal) and is_moving():
+			# Calculate the angle of the slope
+			var angle = forward_direction.angle_to(floor_normal)
+			var slope_factor = clamp(angle / (PI / 2), 0, 1)  # Normalize the angle to a value between 0 and 1
+			
+			# Apply drag based on slope angle and current speed
+			var drag_amount = slope_factor * drag_factor * current_speed * delta
+			current_speed = max(current_speed - drag_amount, top_speed * 0.45)  # Ensure minimum speed is 45% of top speed
+
+			# Debugging output
+			print("Uphill: Angle: ", angle, " Slope Factor: ", slope_factor, " Drag Amount: ", drag_amount, " Current Speed: ", current_speed)
+
 		# Apply acceleration
 		if is_on_floor():
 			if target_speed > current_speed:
@@ -171,8 +173,11 @@ func _physics_process(delta: float) -> void:
 		# Set the velocity based on the current speed
 		velocity.x = direction.x * current_speed
 		velocity.z = direction.z * current_speed
+
+		# Update rotation based on the floor normal
+		update_rotation(floor_normal)
+
 	else:
-		# Assuming deceleration_rate is defined and current_speed is initialized
 		current_speed = current_speed - (deceleration_rate / 10)
 		current_speed = max(current_speed, 0)
 
