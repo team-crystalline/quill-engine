@@ -1,13 +1,31 @@
-[gd_scene load_steps=8 format=3 uid="uid://dr5h4igk1uk1x"]
+[gd_scene load_steps=13 format=3 uid="uid://dr5h4igk1uk1x"]
 
 [ext_resource type="Script" path="res://Scenes/Scripts/player.gd" id="1_bx745"]
-[ext_resource type="PackedScene" uid="uid://b05ha6e2kp12k" path="res://Scenes/player-sonic.tscn" id="2_0i6cb"]
+[ext_resource type="Script" path="res://Scenes/Scripts/camera_pivot.gd" id="2_dm72f"]
 [ext_resource type="AudioStream" uid="uid://duwrvp8lmogj0" path="res://Audio/FX/ring.ogg" id="3_s2ogt"]
 [ext_resource type="AudioStream" uid="uid://6awa70y4vryu" path="res://Audio/FX/jump.ogg" id="4_p63kn"]
 
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_4y0hj"]
+frequency = 0.0562
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_37f5k"]
+noise = SubResource("FastNoiseLite_4y0hj")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cb1fg"]
+albedo_color = Color(0.328, 0.3854, 0.82, 1)
+albedo_texture = SubResource("NoiseTexture2D_37f5k")
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_blown"]
+material = SubResource("StandardMaterial3D_cb1fg")
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_guixs"]
+top_radius = 0.25
+bottom_radius = 0.25
+height = 0.15
+
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_pjq45"]
-radius = 0.333643
-height = 1.72017
+radius = 0.261054
+height = 1.67536
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lttlp"]
 albedo_color = Color(0.078, 0.0954, 0.6, 1)
@@ -16,34 +34,49 @@ albedo_color = Color(0.078, 0.0954, 0.6, 1)
 material = SubResource("StandardMaterial3D_lttlp")
 
 [node name="Player" type="CharacterBody3D" groups=["Player"]]
+floor_snap_length = 1.0
 script = ExtResource("1_bx745")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.201846, 0)
-shape = SubResource("CapsuleShape3D_pjq45")
+[node name="Sonic" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.963517, 0.562514)
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.999992, -0.00401454, 0, 0.00401454, 0.999992, 0, 0.74058, 3.78038)
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Sonic"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -0.00794961, 0, -0.499934)
+mesh = SubResource("CapsuleMesh_blown")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Sonic"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.287023, 0.0227226)
+mesh = SubResource("CylinderMesh_guixs")
+
+[node name="CameraPivot" type="Node3D" parent="."]
+script = ExtResource("2_dm72f")
+
+[node name="Camera3D" type="Camera3D" parent="CameraPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.76443, 3.91451)
 doppler_tracking = 1
 
-[node name="Sonic" parent="." instance=ExtResource("2_0i6cb")]
-transform = Transform3D(0.03, 0, 0, 0, 0.03, 0, 0, 0, 0.03, 0, -0.970245, 0)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00879997, 0.811019, 0.0235649)
+shape = SubResource("CapsuleShape3D_pjq45")
 
 [node name="JumpModel" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.22158, 0)
 visible = false
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="JumpModel"]
 mesh = SubResource("SphereMesh_2ndy1")
 
 [node name="SpotLight" type="SpotLight3D" parent="."]
-transform = Transform3D(0.999328, 0.0348338, 0.0113959, -0.0366312, 0.939201, 0.341409, 0.00118953, -0.341597, 0.939846, 0.0265532, 0.762832, 2.29484)
+transform = Transform3D(0.999998, -0.00123651, 0.00175484, 0.00113773, 0.998474, 0.0552126, -0.00182043, -0.0552105, 0.998473, 0.0983381, 1.14334, 3.13261)
 light_color = Color(1, 0.888, 0.79, 1)
+light_energy = 3.095
 shadow_enabled = true
-spot_range = 3.88342
-spot_angle = 28.0256
+spot_range = 3.70408
+spot_angle = 20.335
 
 [node name="RingSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_s2ogt")
+volume_db = -11.216
 max_polyphony = 20
 
 [node name="JumpSound" type="AudioStreamPlayer" parent="."]

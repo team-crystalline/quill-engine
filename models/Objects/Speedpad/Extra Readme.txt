@@ -1,0 +1,1 @@
+The .Obj version of this doesn't import with the correct material settings. To fix this, change the 07bdaebd material to be mirrored on the U axis, tiled on 0.5 on the U axis, and offset to 0.5 on the U axis. If you ever wanted this part to move like it does ingame, mess with the V axis offset.

@@ -1,0 +1,24 @@
+[gd_scene load_steps=6 format=3 uid="uid://x22uvm26pxmr"]
+
+[ext_resource type="PackedScene" uid="uid://dy7fkfif6fgcx" path="res://models/Levels/RH1-C.fbx" id="1_73770"]
+
+[sub_resource type="Gradient" id="Gradient_tvayh"]
+colors = PackedColorArray(0.1036, 0.28, 0.21826, 1, 0.45, 1, 0.468333, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_swa1g"]
+noise_type = 0
+frequency = 1.0
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_eu28q"]
+color_ramp = SubResource("Gradient_tvayh")
+noise = SubResource("FastNoiseLite_swa1g")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_r7wbs"]
+render_priority = 1
+albedo_color = Color(0.42, 0.7, 0.485333, 1)
+albedo_texture = SubResource("NoiseTexture2D_eu28q")
+
+[node name="RH1-C" instance=ExtResource("1_73770")]
+
+[node name="ground" parent="." index="0"]
+surface_material_override/0 = SubResource("StandardMaterial3D_r7wbs")

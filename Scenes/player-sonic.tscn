@@ -22,9 +22,6 @@ _data = {
 [node name="n000_object_000099A0" parent="." index="0"]
 transform = Transform3D(-2.18557e-08, 0, 0.5, 0, 0.5, 0, -0.5, 0, -2.18557e-08, 0.001, 0, 0)
 
-[node name="Skeleton3D" parent="n000_object_000099A0" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
-
 [node name="AnimationPlayer" type="AnimationPlayer" parent="n000_object_000099A0/Skeleton3D" index="1"]
 libraries = {
 "": SubResource("AnimationLibrary_ckm78")

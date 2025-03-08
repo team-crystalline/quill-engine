@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://b46p2u6le8ftn"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_mv108"]
+size = Vector3(1, 0.181885, 2.14648)
+
+[sub_resource type="BoxMesh" id="BoxMesh_u02rg"]
+
+[node name="Dash-pad" type="StaticBody3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_mv108")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.986669, 0, 0, 0, 0.045471, 0, 0, 0, 1.8111, 0, 0, 0)
+mesh = SubResource("BoxMesh_u02rg")
