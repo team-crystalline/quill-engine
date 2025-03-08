@@ -76,6 +76,7 @@ spot_angle = 20.335
 
 [node name="RingSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_s2ogt")
+volume_db = -11.216
 max_polyphony = 20
 
 [node name="JumpSound" type="AudioStreamPlayer" parent="."]

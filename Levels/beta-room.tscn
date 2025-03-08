@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://Scenes/Scripts/room.gd" id="1_wwecs"]
 [ext_resource type="PackedScene" uid="uid://b6osv3mvkgnwe" path="res://HUD/HUD.tscn" id="3_4npk3"]
 [ext_resource type="PackedScene" uid="uid://clu4noec3auv1" path="res://Scenes/ring.tscn" id="4_cnk0h"]
-[ext_resource type="Texture2D" uid="uid://1mmgbbbfb0id" path="res://Graphics/Textures/Placeholders/Dark/texture_12.png" id="4_hynl2"]
+[ext_resource type="Texture2D" uid="uid://c0gjjjc74r8h3" path="res://Graphics/Textures/Placeholders/Dark/texture_08.png" id="4_ksxjb"]
 [ext_resource type="PackedScene" uid="uid://dtojkni8rqwp8" path="res://Scenes/Objects/spring.tscn" id="5_jkkhu"]
 [ext_resource type="Texture2D" uid="uid://b81y0j6p5n4c5" path="res://Graphics/Textures/Placeholders/Dark/texture_10.png" id="5_xl2xh"]
 [ext_resource type="Texture2D" uid="uid://djw07vbieucg6" path="res://Graphics/Textures/Placeholders/Orange/texture_05.png" id="6_dbcxi"]
@@ -27,8 +27,8 @@ sky = SubResource("Sky_vkamw")
 size = Vector3(100, 0.5, 100)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g4rcr"]
-albedo_texture = ExtResource("4_hynl2")
-uv1_scale = Vector3(256, 256, 256)
+albedo_texture = ExtResource("4_ksxjb")
+uv1_scale = Vector3(64, 64, 64)
 
 [sub_resource type="BoxMesh" id="BoxMesh_g6l24"]
 material = SubResource("StandardMaterial3D_g4rcr")
@@ -60,6 +60,7 @@ size = Vector3(25, 0.5, 100)
 editor_description = "The parent node to the level."
 script = ExtResource("1_wwecs")
 metadata/LevelName = "Beta Room"
+metadata/Mission = "Play around!"
 
 [node name="Hud" parent="." instance=ExtResource("3_4npk3")]
 

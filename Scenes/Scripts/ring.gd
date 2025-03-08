@@ -1,4 +1,6 @@
 extends Area3D
+@onready var is_touched : bool = false # Prevent ring duping
+
 @onready var player := get_tree().get_first_node_in_group("Player")
 @onready var timer = $Timer # 10 seconds before deleting themselves.
 @onready var hud := get_tree().get_first_node_in_group("HUD")
@@ -11,7 +13,8 @@ func _ready() -> void:
 	add_to_group("Player")
 
 func _on_body_entered(body):
-	if body.is_in_group("Player"):
+	if body.is_in_group("Player") and not is_touched:
+		is_touched = true
 		bling.visible=true
 		ring_box.visible = false
 		ring_model.visible=false
